@@ -2,7 +2,7 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const db = require("./db/connection");
 
-// Prompt User for Choices
+// Prompt for user choices
 const promptUser = () => {
     inquirer.prompt([
                 {
@@ -28,7 +28,6 @@ const promptUser = () => {
                    ]
                 }
             ])
-
             .then((answers) => {
                 const {choices} = answers;
           
@@ -37,66 +36,82 @@ const promptUser = () => {
                   }
 
                   if (choices === 'View All Roles') {
-                    viewAllRoles();
+                     viewAllRoles();
                 }
           
                   if (choices === 'View All Departments') {
-                    viewAllDepartments();
+                     viewAllDepartments();
                 }
           
                   if (choices === 'View All Employees By Department') {
-                      viewEmployeesByDepartment();
+                     viewEmployeesByDepartment();
                   }
 
                   if (choices === 'View All Employees By Manager') {
-                    viewEmployeesByManager();
+                     viewEmployeesByManager();
                 }
 
                   if (choices === 'View Department Budgets') {
-                    viewDepartmentBudget();
+                     viewDepartmentBudget();
                 }
 
                   if (choices === 'Update Employee Role') {
-                    updateEmployeeRole();
+                     updateEmployeeRole();
                 }
         
                   if (choices === 'Update Employee Manager') {
-                    updateEmployeeManager();
+                     updateEmployeeManager();
                 }
           
                   if (choices === 'Add Employee') {
-                      addEmployee();
+                     addEmployee();
                   }
 
                   if (choices === 'Add Role') {
-                    addRole();
+                     addRole();
                 }
 
                   if (choices === 'Add Department') {
-                    addDepartment();
+                     addDepartment();
                 }
           
                   if (choices === 'Remove Employee') {
-                      removeEmployee();
+                     removeEmployee();
                   }
           
                   if (choices === 'Remove Role') {
-                      removeRole();
+                     removeRole();
                   }
                     
                   if (choices === 'Remove Department') {
-                      removeDepartment();
+                     removeDepartment();
                   }
           
                   if (choices === 'Exit') {
-                      connection.end();
+                     db.end();
                   }
             });
           };
 
+// View All Employees
+const viewAllEmployees = () => {
+    const sql = `SELECT employee.id, 
+                employee.first_name, 
+                employee.last_name, 
+                roles.title, 
+                department.dept_name AS 'department', 
+                roles.salary
+                FROM employee, roles, department 
+                WHERE department.id = roles.department_id 
+                AND roles.id = employee.role_id
+                ORDER BY employee.id ASC`;
 
-
-
+    db.promise().query(sql, (error, response) => {
+        if (error) throw error;
+        console.table(response);
+        promptUser();
+    });
+};
   
 // Start server after DB connection
 db.connect(err => {
