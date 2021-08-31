@@ -1,33 +1,34 @@
 INSERT INTO department (dept_name)
 VALUES
-  ('Product Management'),
-  ('Graphics'),
-  ('Logistics'),
-  ('Purchasing'),
-  ('Warehouse');
+  ("Executive"), 
+  ("Finance"), 
+  ("Human Resources"), 
+  ("Information Technology"), 
+  ("Operations"), 
+  ("Sales");
 
 INSERT INTO roles (title, salary, department_id)
 VALUES
-  ('Merchandising Assistant', 53000, 1),
-  ('Merchandising Associate', 72000, 1),
-  ('Merchandising Manager', 80000, 1),
-  ('Graphics Designer', 60000, 2),
-  ('Senior Graphics Designer', 70000, 5),
-  ('Logistics Coordinator', 45000, 3),
-  ('Purchaser', 45000, 3),
-  ('Shipper', 40000, 4);
+  ("Manager", 80000, 1),
+  ("Assistant Manager", 970000, 1),
+  ("Accountant", 65000, 2),
+  ("HR Coordinator", 65000, 3),
+  ("Software Developer", 115000, 4),
+  ("Administrator", 40000, 5),
+  ("Director", 120000, 6),
+  ("Compliance Associate", 50000, 6),
+  ("Sales Rep", 60000, 6);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-  ('Ron', 'Bank', 1, 1),
-  ('Sara', 'Wolf', 1, null),
-  ('Pete', 'Gaveston', 1, 2),
-  ('Charles', 'Le', 2, 2),
-  ('Kath', 'Smith', 2, null),
-  ('Dora', 'Carrington', 3, 1),
-  ('Edward', 'Bellamy', 3, null),
-  ('Montague', 'Summers', 4, null),
-  ('Octavia', 'Butler', 4, null),
-  ('Unica', 'Zurn', 5, null),
+  ('Ron', 'Bank', 1, null),
+  ('Sara', 'Wolf', 2, 1),
+  ('Pete', 'Gaveston', 3, null),
+  ('Charles', 'Le', 4, null),
+  ('Kath', 'Smith', 5, null),
+  ('Dora', 'Carrington', 6, 1),
+  ('Edward', 'Bellamy', 7, null),
+  ('Montague', 'Summers', 8, 7),
+  ('Octavia', 'Butler', 9, 7),
   ('John', 'Lee', 5, null);
 
