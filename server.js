@@ -14,7 +14,7 @@ const promptUser = () => {
                         'View All Roles',
                         'View All Departments',
                         'View All Employees By Department',
-                        "View All Employees by Manager",
+                        "View All Employees By Manager",
                         'View Department Budgets',
                         'Add Employee',
                         'Add Role',
@@ -37,11 +37,11 @@ const promptUser = () => {
 
                   if (choices === 'View All Roles') {
                      viewAllRoles();
-                }
+                  }
           
                   if (choices === 'View All Departments') {
                      viewAllDepartments();
-                }
+                  }
           
                   if (choices === 'View All Employees By Department') {
                      viewEmployeesByDepartment();
@@ -49,11 +49,11 @@ const promptUser = () => {
 
                   if (choices === 'View All Employees By Manager') {
                      viewEmployeesByManager();
-                }
+                  }
 
                   if (choices === 'View Department Budgets') {
                      viewDepartmentBudget();
-                }
+                  }
 
                   // Add:
                   if (choices === 'Add Employee') {
@@ -62,11 +62,11 @@ const promptUser = () => {
 
                   if (choices === 'Add Role') {
                      addRole();
-                }
+                  }
 
                   if (choices === 'Add Department') {
                      addDepartment();
-                }
+                  }
                   // Remove: 
                   if (choices === 'Remove Employee') {
                      removeEmployee();
@@ -83,11 +83,11 @@ const promptUser = () => {
                   // Update:
                   if (choices === 'Update Employee Role') {
                      updateEmployeeRole();
-                }
+                  }
         
                   if (choices === 'Update Employee Manager') {
                      updateEmployeeManager();
-                }
+                  }
                   // Exit:
                   if (choices === 'Exit') {
                      db.end();
@@ -191,8 +191,79 @@ const viewDepartmentBudget = () => {
 
 // Add Employee
 const addEmployee = () => {
-   
-};
+   // Add New Employee - first & last name:
+   inquirer.prompt([
+      {
+        type: 'input',
+        name: 'fistName',
+        message: "What is the employee's first name? (Required)",
+        validate: function validateName(input) {
+         return input !== '';
+         }
+      },
+      {
+        type: 'input',
+        name: 'lastName',
+        message: "What is the employee's last name? (Required)",
+        validate: function validateName(input) {
+         return input !== '';
+         }
+      }
+    ])
+      .then(answer => {
+      const newEmployee = [answer.fistName, answer.lastName]
+
+      // Then select Roles:
+      const roleSql = `SELECT roles.id, roles.title FROM roles`;
+
+      db.query(roleSql, (error, data) => {
+        if (error) throw error; 
+        const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+        inquirer.prompt([
+              {
+                type: 'list',
+                name: 'role',
+                message: "What is the employee's role?",
+                choices: roles
+              }
+            ])
+              .then(roleChoice => {
+                const role = roleChoice.role;
+                newEmployee.push(role);
+
+      // Then select Managers:
+      const managerSql =  `SELECT * FROM employee`;
+
+         db.query(managerSql, (error, data) => {
+            if (error) throw error;
+            const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+            inquirer.prompt([
+               {
+                  type: 'list',
+                  name: 'manager',
+                  message: "Who is the employee's manager?",
+                  choices: managers
+               }
+            ])
+            .then(managerChoice => {
+               const manager = managerChoice.manager;
+               newEmployee.push(manager);
+               
+               // Insert newEmployee to table:
+               const sql =   `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                           VALUES (?, ?, ?, ?)`;
+
+               db.query(sql, newEmployee, (error) => {
+                  if (error) throw error;
+                  console.log("Employee has been added!")
+                  viewAllEmployees();
+                });
+              });
+            });
+          });
+       });
+    });
+  };
 
 
 // Update Employee Role
