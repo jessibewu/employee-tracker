@@ -16,14 +16,14 @@ const promptUser = () => {
                         'View All Employees By Department',
                         "View All Employees by Manager",
                         'View Department Budgets',
-                        'Update Employee Role',
-                        'Update Employee Manager',
                         'Add Employee',
                         'Add Role',
                         'Add Department',
                         'Remove Employee',
                         'Remove Role',
                         'Remove Department',
+                        'Update Employee Role',
+                        'Update Employee Manager',
                         'Exit'
                    ]
                 }
@@ -54,14 +54,7 @@ const promptUser = () => {
                   if (choices === 'View Department Budgets') {
                      viewDepartmentBudget();
                 }
-                  // Update:
-                  if (choices === 'Update Employee Role') {
-                     updateEmployeeRole();
-                }
-        
-                  if (choices === 'Update Employee Manager') {
-                     updateEmployeeManager();
-                }
+
                   // Add:
                   if (choices === 'Add Employee') {
                      addEmployee();
@@ -86,6 +79,15 @@ const promptUser = () => {
                   if (choices === 'Remove Department') {
                      removeDepartment();
                   }
+                  
+                  // Update:
+                  if (choices === 'Update Employee Role') {
+                     updateEmployeeRole();
+                }
+        
+                  if (choices === 'Update Employee Manager') {
+                     updateEmployeeManager();
+                }
                   // Exit:
                   if (choices === 'Exit') {
                      db.end();
@@ -107,18 +109,18 @@ const viewAllEmployees = () => {
                 JOIN department ON roles.department_id = department.id 
                 ORDER BY employee.id`;
 
-    db.promise().query(sql, (error, response) => {
+    db.query(sql, (error, response) => {
         if (error) throw error;
         console.table(response);
         promptUser();
-    });
+    }); //.catch((error))
 };
 
 // View all Roles
 const viewAllRoles = () => {
-    const sql = `SELECT * FROM role`;
+    const sql = `SELECT * FROM roles`;
 
-    db.promise().query(sql, (error, response) => {
+    db.query(sql, (error, response) => {
         if (error) throw error;
         console.table(response);
         promptUser();
@@ -129,7 +131,7 @@ const viewAllRoles = () => {
 const viewAllDepartments = () => {
    const sql = `SELECT * FROM department`;
 
-   db.promise().query(sql, (error, response) => {
+   db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -145,7 +147,7 @@ const viewEmployeesByDepartment = () => {
                LEFT JOIN roles ON employee.role_id = roles.id 
                LEFT JOIN department ON roles.department_id = department.id`;
 
-   db.promise().query(sql, (error, response) => {
+   db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -164,7 +166,7 @@ const viewEmployeesByManager = () => {
                JOIN department ON roles.department_id = department.id 
                ORDER BY manager ASC`;
 
-   db.promise().query(sql, (error, response) => {
+   db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -177,18 +179,52 @@ const viewDepartmentBudget = () => {
                department.dept_name AS department,
                SUM(salary) AS budget
                FROM roles
-               JOIN department ON roles.department_id = department.id GROUP BY roles.department_id`;
+               JOIN department ON roles.department_id = department.id 
+               GROUP BY roles.department_id`;
 
-   db.promise().query(sql, (error, response) => {
+   db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
    });
 };
 
+// Add Employee
+const addEmployee = () => {
+   
+};
+
+
+// Update Employee Role
+// const updateEmployeeRole = () => {
+//    const sql = `SELECT employee.id, 
+//                employee.first_name, 
+//                employee.last_name, 
+//                roles.id AS "role_id"
+//                FROM employee, roles, department 
+//                WHERE department.id = roles.department_id 
+//                AND roles.id = employee.role_id`;
+
+//    db.query(sql, (error, response) => {
+//       if (error) throw error;
+//       console.table(response);
+//       promptUser();
+//    });
+// };
+
+
+
+
+
+
+
+
+
+
 
 // Start server after DB connection
-db.connect(err => {
-    if (err) throw err;
+db.connect((error) => {
+   if (error) throw error;
     console.log('Database connected.');
+    promptUser();
 });
