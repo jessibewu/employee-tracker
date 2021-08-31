@@ -255,7 +255,7 @@ const addEmployee = () => {
 
                db.query(sql, newEmployee, (error) => {
                   if (error) throw error;
-                  console.log("Employee has been added!")
+                  console.log("New employee has been added!")
                   viewAllEmployees();
                 });
               });
@@ -264,6 +264,94 @@ const addEmployee = () => {
        });
     });
   };
+
+// Add new Role
+const addRole = () => {
+   const sql = 'SELECT * FROM department';
+   
+   db.query(sql, (error, response) => {
+       if (error) throw error;
+       let deptNamesArray = [];
+       response.forEach((department) => {deptNamesArray.push(department.dept_name);});
+       deptNamesArray.push('Create Department');
+       
+       inquirer.prompt([
+           {
+             name: 'departmentName',
+             type: 'list',
+             message: 'Which department is this new role in?',
+             choices: deptNamesArray
+           }
+         ])
+         .then((answer) => {
+           if (answer.departmentName === 'Create Department') {
+             this.addDepartment();
+           } else {
+             addRoleResume(answer);
+           }
+         });
+ 
+       const addRoleResume = (departmentData) => {
+         inquirer.prompt([
+             {
+               name: 'newRole',
+               type: 'input',
+               message: 'What is the name of this new role?',
+               validate: function validateInput(input) {
+                  return input !== '';
+                  }
+             },
+             {
+               name: 'salary',
+               type: 'input',
+               message: 'What is the salary of this new role?',
+               validate: function validateInput(input) {
+                  return input !== '';
+                  }
+             }
+           ])
+           .then((answer) => {
+             let createdRole = answer.newRole;
+             let departmentId;
+ 
+             response.forEach((department) => {
+               if (departmentData.departmentName === department.dept_name) {departmentId = department.id;}
+             });
+ 
+             let sql = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
+             let criteria = [createdRole, answer.salary, departmentId];
+ 
+             db.query(sql, criteria, (error) => {
+               if (error) throw error;
+               console.log("New role has been added!");
+               viewAllRoles();
+             });
+           });
+       };
+     });
+   };
+
+// Add new Department
+const addDepartment = () => {
+   inquirer.prompt([
+       {
+         name: 'newDepartment',
+         type: 'input',
+         message: 'What is the name of your new Department?',
+         validate: function validateInput(input) {
+            return input !== '';
+            }
+       }
+     ])
+     .then((answer) => {
+       let sql = `INSERT INTO department (dept_name) VALUES (?)`;
+       db.query(sql, answer.newDepartment, (error, response) => {
+         if (error) throw error;
+         console.log("New department has been added!");
+         viewAllDepartments();
+       });
+     });
+};
 
 
 // Update Employee Role
