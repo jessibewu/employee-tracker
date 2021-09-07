@@ -96,7 +96,7 @@ const promptUser = () => {
           };
 
 // View All Employees
-const viewAllEmployees = () => {
+async function viewAllEmployees () {
     const sql = `SELECT employee.id, 
                 employee.first_name, 
                 employee.last_name, 
@@ -109,18 +109,18 @@ const viewAllEmployees = () => {
                 JOIN department ON roles.department_id = department.id 
                 ORDER BY employee.id`;
 
-    db.query(sql, (error, response) => {
+    await db.query(sql, (error, response) => {
         if (error) throw error;
         console.table(response);
         promptUser();
-    }); //.catch((error))
+    }); 
 };
 
 // View all Roles
-const viewAllRoles = () => {
+async function viewAllRoles () {
     const sql = `SELECT * FROM roles`;
 
-    db.query(sql, (error, response) => {
+    await db.query(sql, (error, response) => {
         if (error) throw error;
         console.table(response);
         promptUser();
@@ -128,10 +128,10 @@ const viewAllRoles = () => {
 };
 
 // View All Departments
-const viewAllDepartments = () => {
+async function viewAllDepartments () {
    const sql = `SELECT * FROM department`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -139,7 +139,7 @@ const viewAllDepartments = () => {
 };
 
 // View All Employees By Department
-const viewEmployeesByDepartment = () => {
+async function viewEmployeesByDepartment () {
    const sql = `SELECT employee.first_name, 
                employee.last_name, 
                department.dept_name AS department
@@ -147,7 +147,7 @@ const viewEmployeesByDepartment = () => {
                LEFT JOIN roles ON employee.role_id = roles.id 
                LEFT JOIN department ON roles.department_id = department.id`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -155,7 +155,7 @@ const viewEmployeesByDepartment = () => {
 };
 
 // View All Employees By Manager
-const viewEmployeesByManager = () => {
+async function viewEmployeesByManager () {
    const sql = `SELECT employee.first_name, 
                employee.last_name, 
                roles.title,
@@ -166,7 +166,7 @@ const viewEmployeesByManager = () => {
                JOIN department ON roles.department_id = department.id 
                ORDER BY manager ASC`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -174,7 +174,7 @@ const viewEmployeesByManager = () => {
 };
 
 // View Department Budgets
-const viewDepartmentBudget = () => {
+async function viewDepartmentBudget () {
    const sql = `SELECT department_id AS id, 
                department.dept_name AS department,
                SUM(salary) AS budget
@@ -182,7 +182,7 @@ const viewDepartmentBudget = () => {
                JOIN department ON roles.department_id = department.id 
                GROUP BY roles.department_id`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
        if (error) throw error;
        console.table(response);
        promptUser();
@@ -190,7 +190,7 @@ const viewDepartmentBudget = () => {
 };
 
 // Add Employee
-const addEmployee = () => {
+async function addEmployee () {
    // Add New Employee - first & last name:
    inquirer.prompt([
       {
@@ -234,7 +234,7 @@ const addEmployee = () => {
       // Then select Managers:
       const managerSql =  `SELECT * FROM employee`;
 
-         db.query(managerSql, (error, data) => {
+      db.query(managerSql, (error, data) => {
             if (error) throw error;
             const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
             inquirer.prompt([
@@ -266,10 +266,10 @@ const addEmployee = () => {
   };
 
 // Add new Role
-const addRole = () => {
+async function addRole () {
    const sql = 'SELECT * FROM department';
    
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
        if (error) throw error;
        let deptNamesArray = [];
        response.forEach((department) => {deptNamesArray.push(department.dept_name);});
@@ -332,7 +332,7 @@ const addRole = () => {
    };
 
 // Add new Department
-const addDepartment = () => {
+async function addDepartment () {
    inquirer.prompt([
        {
          name: 'newDepartment',
@@ -355,10 +355,10 @@ const addDepartment = () => {
 };
 
 // Remove an Employee
-const removeEmployee = () => {
+async function removeEmployee () {
    let sql = `SELECT employee.id, employee.first_name, employee.last_name FROM employee`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
      if (error) throw error;
      let employeeNamesArray = [];
      response.forEach((employee) => {employeeNamesArray.push(`${employee.first_name} ${employee.last_name}`);});
@@ -394,10 +394,10 @@ const removeEmployee = () => {
  };
 
 // Remove a Role
-const removeRole = () => {
+async function removeRole () {
    let sql = `SELECT roles.id, roles.title FROM roles`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
      if (error) throw error;
      let roleNamesArray = [];
      response.forEach((roles) => {roleNamesArray.push(roles.title);});
@@ -431,10 +431,10 @@ const removeRole = () => {
  };
 
 // Remove a Department
-const removeDepartment = () => {
+async function removeDepartment () {
    let sql = `SELECT department.id, department.dept_name FROM department`;
 
-   db.query(sql, (error, response) => {
+   await db.query(sql, (error, response) => {
      if (error) throw error;
      let departmentNamesArray = [];
      response.forEach((department) => {departmentNamesArray.push(department.dept_name);});
@@ -468,10 +468,10 @@ const removeDepartment = () => {
 };
 
 // Update Employee's Role
-const updateEmployeeRole = () => {
+async function updateEmployeeRole () {
    let sql = `SELECT * FROM employee`;
  
-   db.query(sql, (err, data) => {
+   await db.query(sql, (err, data) => {
       if (err) throw err; 
       const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
  
@@ -524,11 +524,11 @@ const updateEmployeeRole = () => {
  };
 
 // Update Employee's Manager
-const updateEmployeeManager = () => {
+async function updateEmployeeManager () {
    let sql = `SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id
              FROM employee`;
 
-    db.query(sql, (error, response) => {
+    await db.query(sql, (error, response) => {
      let employeeNamesArray = [];
      response.forEach((employee) => {employeeNamesArray.push(`${employee.first_name} ${employee.last_name}`)});
 
