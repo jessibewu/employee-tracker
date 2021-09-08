@@ -38,7 +38,10 @@
 
   Demo Video:
 
-  ![Demo Video](https://youtu.be/TBJBRRfIwUc)
+  Full youtube video can be viewed [here](https://youtu.be/TBJBRRfIwUc).
+
+  Below is the GIF version for quick reference:
+  ![Demo Video](./src/demo-video.gif)
   
   ## License
   This application is covered by [MIT](https://opensource.org/licenses/MIT) license. 
