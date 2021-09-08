@@ -3,6 +3,7 @@ const cTable = require('console.table');
 const app = require('../server');
 const db = require('../db/connection');
 
+
 const view = {
 
 // View All Employees
@@ -19,11 +20,17 @@ viewAllEmployees() {
                 JOIN department ON roles.department_id = department.id 
                 ORDER BY employee.id`;
 
-    db.query(sql, (error, response) => {
-        if (error) throw error;
+    // db.promise().query(sql, (error, response) => {
+    //     if (error) throw error;
+    //     console.table(response);
+    //     app.promptUser();
+    // }); //.catch((error))
+
+    db.promise().query(sql).then((response) => {
+        //if (error) throw error;
         console.table(response);
-        app.promptUser();
-    }); //.catch((error))
+        promptUser();
+    }).catch((error) => console.log(error));
 },
 
 // View all Roles

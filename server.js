@@ -1,12 +1,15 @@
+// Dependencies
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 const db = require("./db/connection");
+
+// Require files from utils folder
 const view = require("./utils/view");
 const add = require("./utils/add");
 const remove = require("./utils/remove");
 const update = require("./utils/update");
 
-// Prompt for user choices
+// Prompt for Inquirer user choices
 const promptUser = () => {
     inquirer.prompt([
                 {
@@ -34,7 +37,7 @@ const promptUser = () => {
             ])
             .then((answers) => {
                 const {choices} = answers;
-                  // View:
+                  // --------- View ---------
                   if (choices === 'View All Employees') {
                       view.viewAllEmployees();
                   }
@@ -59,7 +62,7 @@ const promptUser = () => {
                     view.viewDepartmentBudget();
                   }
 
-                  // Add:
+                  // --------- Add ---------
                   if (choices === 'Add Employee') {
                     add.addEmployee();
                   }
@@ -71,7 +74,7 @@ const promptUser = () => {
                   if (choices === 'Add Department') {
                     add.addDepartment();
                   }
-                  // Remove: 
+                  // --------- Remove ---------
                   if (choices === 'Remove Employee') {
                      remove.removeEmployee();
                   }
@@ -84,7 +87,7 @@ const promptUser = () => {
                     remove.removeDepartment();
                   }
                   
-                  // Update:
+                  // --------- Update ---------
                   if (choices === 'Update Employee Role') {
                      update.updateEmployeeRole();
                   }
@@ -92,7 +95,7 @@ const promptUser = () => {
                   if (choices === 'Update Employee Manager') {
                     update.updateEmployeeManager();
                   }
-                  // Exit:
+                  // --------- Exit ---------
                   if (choices === 'Exit') {
                     db.end();
                   }
