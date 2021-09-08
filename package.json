@@ -11,7 +11,7 @@
     "url": "git+https://github.com/jessibewu/employee-tracker.git"
   },
   "author": "Jessica Wu",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jessibewu/employee-tracker/issues"
   },
@@ -20,8 +20,6 @@
     "console.table": "^0.10.0",
     "dotenv": "^10.0.0",
     "inquirer": "^8.1.2",
-    "mysql2": "^2.3.0",
-    "mysql2-promise": "^0.1.4",
-    "promise-mysql2": "^1.0.0"
+    "mysql2": "^2.3.0"
   }
 }
