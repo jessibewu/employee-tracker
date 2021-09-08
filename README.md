@@ -38,7 +38,7 @@
 
   Demo Video:
 
-  ![Demo Video](./src/demo-video.gif)
+  ![Demo Video](https://youtu.be/TBJBRRfIwUc)
   
   ## License
   This application is covered by [MIT](https://opensource.org/licenses/MIT) license. 
