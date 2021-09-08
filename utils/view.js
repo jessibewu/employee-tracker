@@ -20,16 +20,9 @@ viewAllEmployees() {
                 JOIN department ON roles.department_id = department.id 
                 ORDER BY employee.id`;
 
-    // db.promise().query(sql, (error, response) => {
-    //     if (error) throw error;
-    //     console.table(response);
-    //     app.promptUser();
-    // }); //.catch((error))
-
-    db.promise().query(sql).then((response) => {
-        //if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
         console.table(response);
-        promptUser();
+        app.promptUser();
     }).catch((error) => console.log(error));
 },
 
@@ -37,22 +30,20 @@ viewAllEmployees() {
 viewAllRoles() {
     const sql = `SELECT * FROM roles`;
 
-    db.query(sql, (error, response) => {
-        if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
         console.table(response);
         app.promptUser();
-    });
+    }).catch((error) => console.log(error));
 },
 
 // View All Departments
 viewAllDepartments() {
    const sql = `SELECT * FROM department`;
 
-   db.query(sql, (error, response) => {
-       if (error) throw error;
-       console.table(response);
-       app.promptUser();
-   });
+   db.promise().query(sql).then(([response]) => {
+        console.table(response);
+        app.promptUser();
+    }).catch((error) => console.log(error));
 },
 
 // View All Employees By Department
@@ -64,11 +55,10 @@ viewEmployeesByDepartment() {
                LEFT JOIN roles ON employee.role_id = roles.id 
                LEFT JOIN department ON roles.department_id = department.id`;
 
-   db.query(sql, (error, response) => {
-       if (error) throw error;
-       console.table(response);
-       app.promptUser();
-   });
+   db.promise().query(sql).then(([response]) => {
+        console.table(response);
+        app.promptUser();
+    }).catch((error) => console.log(error));
 },
 
 // View All Employees By Manager
@@ -83,11 +73,10 @@ viewEmployeesByManager() {
                JOIN department ON roles.department_id = department.id 
                ORDER BY manager ASC`;
 
-   db.query(sql, (error, response) => {
-       if (error) throw error;
-       console.table(response);
-       app.promptUser();
-   });
+   db.promise().query(sql).then(([response]) => {
+        console.table(response);
+        app.promptUser();
+    }).catch((error) => console.log(error));
 },
 
 // View Department Budgets
@@ -99,11 +88,10 @@ viewDepartmentBudget() {
                JOIN department ON roles.department_id = department.id 
                GROUP BY roles.department_id`;
 
-   db.query(sql, (error, response) => {
-       if (error) throw error;
-       console.table(response);
-       app.promptUser();
-   });
+   db.promise().query(sql).then(([response]) => {
+        console.table(response);
+        app.promptUser();
+    }).catch((error) => console.log(error));
 }
 }
 

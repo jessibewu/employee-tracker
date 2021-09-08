@@ -9,8 +9,7 @@ const update = {
 updateEmployeeRole() {
     let sql = `SELECT * FROM employee`;
   
-    db.query(sql, (err, data) => {
-       if (err) throw err; 
+    db.promise().query(sql).then(([data]) => {
        const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
   
        inquirer.prompt([
@@ -28,8 +27,7 @@ updateEmployeeRole() {
   
           let sql = `SELECT * FROM roles`;
   
-          db.query(sql, (err, data) => {
-            if (err) throw err; 
+          db.promise().query(sql).then(([data]) => {
             const roles = data.map(({ id, title }) => ({ name: title, value: id }));
             
               inquirer.prompt([
@@ -50,14 +48,13 @@ updateEmployeeRole() {
                    
                   let sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
   
-                  db.query(sql, params, (err, result) => {
-                   if (err) throw err;
-                   console.log("This employee's role has been updated!");
-                   app.promptUser();
+                  db.promise().query(sql, params).then(() => {
+                    console.log("This employee's role has been updated!");
+                    app.promptUser();
+                  }).catch((error) => console.log(error));
+                });
             });
-          });
         });
-      });
     });
   },
  
@@ -66,7 +63,7 @@ updateEmployeeRole() {
     let sql = `SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id
               FROM employee`;
  
-     db.query(sql, (error, response) => {
+     db.promise().query(sql).then(([response]) => {
       let employeeNamesArray = [];
       response.forEach((employee) => {employeeNamesArray.push(`${employee.first_name} ${employee.last_name}`)});
  
@@ -106,16 +103,14 @@ updateEmployeeRole() {
           } else {
             let sql = `UPDATE employee SET employee.manager_id = ? WHERE employee.id = ?`;
  
-            db.query(sql, [managerId, employeeId], (error) => {
-                if (error) throw error;
-                console.log(`This employee's manager has been updated!`);
-                app.promptUser();
-              }
-            );
+            db.promise().query(sql, [managerId, employeeId]).then(() => {
+              console.log(`This employee's manager has been updated!`);
+              app.promptUser();
+            }).catch((error) => console.log(error));
           }
-        });
+      });
     });
- }
+  }
 }
 
 module.exports = update;

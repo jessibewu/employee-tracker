@@ -9,8 +9,7 @@ const remove = {
 removeEmployee() {
     let sql = `SELECT employee.id, employee.first_name, employee.last_name FROM employee`;
  
-    db.query(sql, (error, response) => {
-      if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
       let employeeNamesArray = [];
       response.forEach((employee) => {employeeNamesArray.push(`${employee.first_name} ${employee.last_name}`);});
  
@@ -35,11 +34,10 @@ removeEmployee() {
  
           let sql = `DELETE FROM employee WHERE employee.id = ?`;
  
-          db.query(sql, [employeeId], (error) => {
-            if (error) throw error;
+          db.promise().query(sql, [employeeId]).then(() => {
             console.log("This employee has been removed!");
             app.promptUser();
-          });
+          }).catch((error) => console.log(error));
         });
     });
   },
@@ -48,8 +46,7 @@ removeEmployee() {
  removeRole() {
     let sql = `SELECT roles.id, roles.title FROM roles`;
  
-    db.query(sql, (error, response) => {
-      if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
       let roleNamesArray = [];
       response.forEach((roles) => {roleNamesArray.push(roles.title);});
  
@@ -72,12 +69,11 @@ removeEmployee() {
  
           let sql = `DELETE FROM roles WHERE roles.id = ?`;
           
-          db.query(sql, [roleId], (error) => {
-            if (error) throw error;
+          db.promise().query(sql, [roleId]).then(() => {
             console.log("This role has been removed!");
             app.promptUser();
           });
-        });
+      });
     });
   },
  
@@ -85,8 +81,7 @@ removeEmployee() {
  removeDepartment() {
     let sql = `SELECT department.id, department.dept_name FROM department`;
  
-    db.query(sql, (error, response) => {
-      if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
       let departmentNamesArray = [];
       response.forEach((department) => {departmentNamesArray.push(department.dept_name);});
  
@@ -109,14 +104,13 @@ removeEmployee() {
  
           let sql = `DELETE FROM department WHERE department.id = ?`;
  
-          db.query(sql, [departmentId], (error) => {
-            if (error) throw error;
+          db.promise().query(sql, [departmentId]).then(() => {
             console.log("This department has been removed!");
             app.promptUser();
           });
-        });
+      });
     });
- }
+  }
 }
 
 module.exports = remove;

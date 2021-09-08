@@ -32,8 +32,7 @@ addEmployee() {
        // Then select Roles:
        const roleSql = `SELECT roles.id, roles.title FROM roles`;
  
-       db.query(roleSql, (error, data) => {
-         if (error) throw error; 
+       db.promise().query(roleSql).then(([data]) => {
          const roles = data.map(({ id, title }) => ({ name: title, value: id }));
          inquirer.prompt([
                {
@@ -48,45 +47,44 @@ addEmployee() {
                  newEmployee.push(role);
  
        // Then select Managers:
-       const managerSql =  `SELECT * FROM employee`;
+       const managerSql = `SELECT * FROM employee`;
  
-          db.query(managerSql, (error, data) => {
-             if (error) throw error;
-             const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
-             inquirer.prompt([
-                {
-                   type: 'list',
-                   name: 'manager',
-                   message: "Who is the employee's manager?",
-                   choices: managers
-                }
+       db.promise().query(managerSql).then(([data]) => {
+         const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+         inquirer.prompt([
+              {
+                  type: 'list',
+                  name: 'manager',
+                  message: "Who is the employee's manager?",
+                  choices: managers
+              }
              ])
              .then(managerChoice => {
                 const manager = managerChoice.manager;
                 newEmployee.push(manager);
                 
                 // Insert newEmployee to table:
-                const sql =   `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                             VALUES (?, ?, ?, ?)`;
- 
-                db.query(sql, newEmployee, (error) => {
-                   if (error) throw error;
-                   console.log("New employee has been added!")
-                   app.promptUser();
-                 });
-               });
-             });
-           });
-        });
-     });
-   },
 
+                db.promise().query(sql, newEmployee).then(() => {
+                  console.log("New employee has been added!")
+                  app.promptUser();
+                }).catch((error) => console.log(error));
+
+            });
+          });
+        });
+      });
+    });
+  },
+   
 // Add new Role
 addRole() {
+    // Select dept and push to an array + 'Create Dept' if dept doesn't exist
     const sql = 'SELECT * FROM department';
    
-    db.query(sql, (error, response) => {
-       if (error) throw error;
+    db.promise().query(sql).then(([response]) => {
        let deptNamesArray = [];
        response.forEach((department) => {deptNamesArray.push(department.dept_name);});
        deptNamesArray.push('Create Department');
@@ -106,7 +104,7 @@ addRole() {
              addRoleResume(answer);
            }
          });
- 
+       
        const addRoleResume = (departmentData) => {
          inquirer.prompt([
              {
@@ -137,15 +135,14 @@ addRole() {
              let sql = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
              let criteria = [createdRole, answer.salary, departmentId];
  
-             db.query(sql, criteria, (error) => {
-               if (error) throw error;
-               console.log("New role has been added!");
-               app.promptUser();
-             });
-           });
-       };
-     });
-    },
+             db.promise().query(sql, criteria).then(() => {
+              console.log("New role has been added!")
+              app.promptUser();
+            }).catch((error) => console.log(error));
+          });
+      };
+    });
+  },
  
  // Add new Department
 addDepartment() {
@@ -162,8 +159,7 @@ addDepartment() {
       .then((answer) => {
         let sql = `INSERT INTO department (dept_name) VALUES (?)`;
  
-        db.query(sql, answer.newDepartment, (error, response) => {
-          if (error) throw error;
+        db.promise().query(sql, answer.newDepartment).then(([response]) => {
           console.log("New department has been added!");
           app.promptUser();
         });
