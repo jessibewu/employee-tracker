@@ -30,15 +30,15 @@
   - [License](#license)
   - [Credits](#credits)
   ## Installation
-  - npm init
-  - npm i inquirer dotenv console.table mysql2
+  `npm init`
+  `npm i inquirer dotenv console.table mysql2`
 
   ## Usage
-  Run "node server.js" command at the root of the file to start answering user questions through the terminal.
+  Run `node server.js` or `npm start` command at the root of the file to start answering user questions through the terminal.
 
   Demo Video:
 
-  ![Team Profile Generator Demo](./src/demo-video.gif)
+  ![Demo Video](./src/demo-video.gif)
   
   ## License
   This application is covered by [MIT](https://opensource.org/licenses/MIT) license. 

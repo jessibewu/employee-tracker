@@ -7,6 +7,7 @@ const remove = {
 
 // Remove an Employee
 removeEmployee() {
+    // Select and push employee first/last names to an array
     let sql = `SELECT employee.id, employee.first_name, employee.last_name FROM employee`;
  
     db.promise().query(sql).then(([response]) => {
@@ -31,7 +32,8 @@ removeEmployee() {
               employeeId = employee.id;
             }
           });
- 
+          
+          // Delete selected employee based on employee id
           let sql = `DELETE FROM employee WHERE employee.id = ?`;
  
           db.promise().query(sql, [employeeId]).then(() => {
@@ -44,6 +46,7 @@ removeEmployee() {
  
  // Remove a Role
  removeRole() {
+    // Select and push roles title to an array
     let sql = `SELECT roles.id, roles.title FROM roles`;
  
     db.promise().query(sql).then(([response]) => {
@@ -67,6 +70,7 @@ removeEmployee() {
             }
           });
  
+          // Delete selected roles based on roles id
           let sql = `DELETE FROM roles WHERE roles.id = ?`;
           
           db.promise().query(sql, [roleId]).then(() => {
@@ -79,6 +83,7 @@ removeEmployee() {
  
  // Remove a Department
  removeDepartment() {
+    // Select and push dept names to an array
     let sql = `SELECT department.id, department.dept_name FROM department`;
  
     db.promise().query(sql).then(([response]) => {
@@ -102,6 +107,7 @@ removeEmployee() {
             }
           });
  
+          // Delete selected dept based on dept id
           let sql = `DELETE FROM department WHERE department.id = ?`;
  
           db.promise().query(sql, [departmentId]).then(() => {

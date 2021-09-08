@@ -28,7 +28,9 @@ viewAllEmployees() {
 
 // View all Roles
 viewAllRoles() {
-    const sql = `SELECT * FROM roles`;
+    const sql = `SELECT roles.id, roles.title, roles.salary,
+                department.dept_name AS department FROM roles
+                INNER JOIN department ON roles.department_id = department.id`;
 
     db.promise().query(sql).then(([response]) => {
         console.table(response);

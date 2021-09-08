@@ -13,10 +13,10 @@ VALUES
   ("Assistant Manager", 970000, 1),
   ("Accountant", 65000, 2),
   ("HR Coordinator", 65000, 3),
-  ("Software Developer", 115000, 4),
+  ("Software Developer", 95000, 4),
   ("Administrator", 40000, 5),
   ("Director", 120000, 6),
-  ("Compliance Associate", 50000, 6),
+  ("Compliance Associate", 50000, 5),
   ("Sales Rep", 60000, 6);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
